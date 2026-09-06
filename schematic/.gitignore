@@ -1,0 +1,16 @@
+# =========================================================================
+# KiCad Exclusions
+# =========================================================================
+# Temporary and auto-backup files (Never track these)
+*.bak
+*.bck
+*.kicad_prl
+*-backups/
+_autosave-*
+*.cache
+*~
+
+# Manufactured output outputs (Optional: keep off git to avoid bloat)
+*.gbr
+*.drl
+*.pdf
