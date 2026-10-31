@@ -1,3 +1,6 @@
 [submodule "app/frontend"]
 	path = app/frontend
 	url = https://github.com/bugambilya/dropora-dashboard.git
+[submodule "app/backend"]
+	path = app/backend
+	url = https://github.com/jstephen17/dropora-backend
