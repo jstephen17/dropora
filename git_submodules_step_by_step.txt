@@ -1,0 +1,188 @@
+GIT SUBMODULES – STEP-BY-STEP GUIDE
+
+1.  WHAT ARE GIT SUBMODULES?
+
+Git submodules allow you to include separate Git repositories inside a
+main repository.
+
+For example, a project may contain: - A main repository - A frontend
+repository - A backend repository
+
+Each submodule maintains its own Git history and remote repository,
+while the main repository tracks a specific commit of each submodule.
+
+2.  UNDERSTANDING THE .gitmodules FILE
+
+The .gitmodules file stores the configuration of submodules.
+
+Example:
+
+[submodule “frontend”] path = frontend url =
+https://github.com/teammate/frontend.git
+
+[submodule “backend”] path = backend url =
+https://github.com/teammate/backend.git
+
+Explanation: - submodule: Name of the submodule. - path: Directory where
+the submodule is located. - url: Remote Git repository address.
+
+3.  CLONING A PROJECT WITH SUBMODULES
+
+Step 1: Clone the main repository.
+
+    git clone https://github.com/teammate/main-project.git
+
+Step 2: Navigate into the project directory.
+
+    cd main-project
+
+Step 3: Initialize and download all submodules.
+
+    git submodule update --init --recursive
+
+This command initializes the submodules and downloads the exact commits
+recorded by the main repository. The –recursive option also handles
+submodules nested inside other submodules.
+
+Step 4: Verify the downloaded submodules.
+
+    git submodule status
+
+Your project structure should look similar to this:
+
+main-project/ |– .git/ |– .gitmodules |– frontend/ | -- ...– backend/ `–
+…
+
+ALTERNATIVE: CLONE EVERYTHING IN ONE COMMAND
+
+Instead of cloning first and downloading submodules afterward, use:
+
+    git clone --recurse-submodules https://github.com/teammate/main-project.git
+
+This clones the main repository and initializes all its submodules.
+
+4.  UPDATING AN EXISTING PROJECT
+
+When your teammate pushes changes to the main repository, follow these
+steps.
+
+Step 1: Navigate into the main project.
+
+    cd main-project
+
+Step 2: Pull the latest main repository changes.
+
+    git pull
+
+Step 3: Synchronize the submodules with the commits recorded by the main
+repository.
+
+    git submodule update --init --recursive
+
+This checks out the submodule commits specified by the updated main
+repository.
+
+5.  UPDATING SUBMODULES TO THEIR LATEST REMOTE COMMITS
+
+Sometimes, you may want the latest commits from the frontend and backend
+repositories instead of the commits currently recorded by the main
+repository.
+
+Run:
+
+    git submodule update --init --recursive --remote
+
+This fetches and checks out the latest commits from the configured
+submodule branches.
+
+IMPORTANT: This may change the submodule commit references in the main
+repository. If you want teammates to receive those updated references,
+commit and push the changes to the main repository.
+
+    git add frontend backend
+    git commit -m "Update submodule references"
+    git push
+
+6.  USEFUL GIT SUBMODULE COMMANDS
+
+git submodule status Checks the status of submodules.
+
+git submodule init Initializes submodule configuration.
+
+git submodule update Checks out the commits recorded by the main
+repository.
+
+git submodule update –init –recursive Initializes and downloads all
+submodules, including nested submodules.
+
+git submodule update –remote Updates submodules to the latest commits
+from their configured remote branches.
+
+git submodule sync –recursive Synchronizes submodule URLs from the
+.gitmodules file.
+
+git submodule foreach ‘git pull’ Runs git pull inside each checked-out
+submodule. Use this only when you intentionally want to pull the
+configured branch in each submodule; it does not necessarily preserve
+the commits recorded by the main repository.
+
+7.  COMMON PROBLEMS
+
+Problem: Repository not found
+
+Possible reasons: - The repository URL is incorrect. - The submodule
+repository is private. - Your GitHub account does not have permission to
+access it.
+
+Problem: Submodule directory is empty
+
+Try:
+
+    git submodule update --init --recursive
+
+Problem: Submodule URL has changed
+
+Run:
+
+    git submodule sync --recursive
+    git submodule update --init --recursive
+
+Problem: Authentication failed
+
+Check that you are authenticated with the correct GitHub account and
+have permission to access each submodule repository. Access to the main
+repository does not automatically grant access to its submodules.
+
+8.  RECOMMENDED TEAM WORKFLOW
+
+When first cloning:
+
+    git clone https://github.com/teammate/main-project.git
+    cd main-project
+    git submodule update --init --recursive
+
+When pulling future changes:
+
+    git pull
+    git submodule update --init --recursive
+
+This keeps your local submodules aligned with the commit references
+recorded in the main repository.
+
+KEY TAKEAWAY
+
+The main repository does not simply track the latest contents of each
+submodule. It tracks a specific commit from each submodule.
+
+Use:
+
+    git submodule update --init --recursive
+
+to retrieve the versions intended by the main repository.
+
+Use:
+
+    git submodule update --init --recursive --remote
+
+only when you intentionally want to update submodules to their latest
+configured remote branch commits.
